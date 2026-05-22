@@ -1,0 +1,10 @@
+# Python dependencies with known vulnerabilities (SCA triggers)
+
+# Critical vulnerabilities
+flask==1.0.2
+django==2.2.0
+requests==2.19.1
+urllib3==1.24.1
+pyyaml==5.1
+jinja2==2.10
+
