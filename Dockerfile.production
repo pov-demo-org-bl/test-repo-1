@@ -1,0 +1,28 @@
+# Production Dockerfile with additional issues
+
+FROM ubuntu:18.04
+
+# Multiple security issues
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    telnet \
+    ftp \
+    netcat
+
+# Credentials in environment
+ARG DB_PASSWORD=ProductionPassword123!
+ENV DB_PASSWORD=${DB_PASSWORD}
+
+# Copying SSH private key
+COPY id_rsa /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+
+# Disabling security features
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+
+# SUID binary creation (privilege escalation risk)
+RUN chmod u+s /usr/bin/find
+
+EXPOSE 21 22 23 3306 5432
+
+CMD ["/usr/sbin/sshd", "-D"]
